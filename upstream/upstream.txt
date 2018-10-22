@@ -1,0 +1,8 @@
+This directory is only used if necessary. Don't touch any files
+inside the directory. Don't put any files inside the directory.
+
+If there's a config file or whatnot that the teacher would like to
+distribute to all groups, it will be placed into this directory in
+the project-upstream. Since groups have not touched the contents
+of the directory, a simple git pull project-upstream master shall
+do very nicely (basically we're avoiding merge conflicts).
