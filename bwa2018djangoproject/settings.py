@@ -83,13 +83,15 @@ DATABASES = {
         # The default database that "ships with" Django is sqliteself.
         # Two lines under this defines the database. If your group uses
         # PostgreSQL, comment these lines out.
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 
         # If your group uses PostgreSQL comment out two lines under this,
         # and add other needed settings.
-        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #'NAME': 'bwa2018djangoproject'
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'bwa2018djangoproject',
+        'USER': 'bwa_project_group',
+        'PASSWORD': 'bwa2018!',
         # if you want to define user, password etc.
         # do it here
     }
