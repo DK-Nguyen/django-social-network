@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # http://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -96,6 +97,8 @@ DATABASES = {
         # do it here
     }
 }
+
+AUTH_USER_MODEL = 'users.SiteUser'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
