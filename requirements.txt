@@ -6,3 +6,4 @@ gunicorn==19.9.0
 psycopg2-binary==2.7.4
 pytz==2018.3
 whitenoise==4.1
+Pillow >= 5.2.0

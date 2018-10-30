@@ -98,6 +98,8 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'users.SiteUser'
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
