@@ -3,6 +3,6 @@ db.sqlite3
 venv/*
 __pycache__/*
 *.pyc
-media/*
+media/profile_pictures/*
 
 
