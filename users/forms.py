@@ -8,6 +8,7 @@ class UserRegisterForm(UserCreationForm):
     address = forms.CharField(required=True, label='Your address')
     first_name = forms.CharField(required=True, max_length=150, label="Your First Name")
     last_name = forms.CharField(required=True, max_length=150, label="Your Last Name")
+    email = forms.EmailField(required=True, label="Your Email")
     phone_number = forms.CharField(label="Your phone number", required=True)
     bio = forms.CharField(required=False, label='Tell us a bit about yourself')
 
@@ -27,7 +28,7 @@ class UserRegisterForm(UserCreationForm):
 
     class Meta:
         model = SiteUser
-        fields = UserCreationForm.Meta.fields + ('first_name', 'last_name', 'address', 'phone_number', 'bio')
+        fields = UserCreationForm.Meta.fields + ('first_name', 'last_name', 'email', 'address', 'phone_number', 'bio')
 
 
 class UserUpdateForm(forms.ModelForm):
