@@ -52,6 +52,7 @@ class TestUserRegisterForm(TestCase):
     def _createInvalidFieldData(self, field):
         temp_data = self.valid_data.copy()
         temp_data[field] = ''
+        return temp_data
 
     def testEmptyFieldForm(self):
         # We don't test empty username, password and password2 since the base form of django already make it reliable
