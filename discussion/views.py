@@ -1,3 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-# Create your views here.
+
+def discussions(request):
+    return render(request, 'discussions.html')
+
+
+def new_discussion(request):
+    return render(request, 'new_discussion.html')
+
+
+def discussion(request):
+    return render(request, 'discussion.html')

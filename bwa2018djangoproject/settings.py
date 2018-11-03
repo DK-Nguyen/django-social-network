@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
+    'discussion.apps.DiscussionConfig'
 ]
 
 MIDDLEWARE = [
