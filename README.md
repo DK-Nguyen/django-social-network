@@ -1,38 +1,128 @@
-**Welcome to the home of your group's BWA course project code and documentation!**
-
-This file is where your group writes your project plan/project report.
-
-When you write it, you must use Markdown. [Documentation for GitLab Flavored Markdown (GFM)](https://docs.gitlab.com/ee/user/markdown.html).
-
+**Welcome to group *Appropriate*'s BWA course project code and documentation!**
 
 # Initial project plan document
-The headers that must be present in this document are shown here. They were copied here from the course project assignment document.
-
-For instructions on what to add under these headers, see the course project assignment document, [Appendix 2: Initial project plan document](https://docs.google.com/document/d/1iJ4z8dQzUWht0ABX18RXa5Rp8hY76vcMJvBbxODs3PE/edit?usp=sharing#heading=h.m6xhgmo8x8lz)
 
 ## Course project group information
 
+Group name: ***Appropriate***
+
+Group members:
+* Dang Hai Luong - dang.luong@student.tut.fi - 268461
+* Duy Khoa Nguyen - nguyen29@student.tut.fi - 272580
+* Joni Seppälä - joni.seppala@student.tut.fi - 246014
+
+Gitlab repo url: [git@course-gitlab.tut.fi:bwa-2018/bwa-group005.git](git@course-gitlab.tut.fi:bwa-2018/bwa-group005.git)
+
+Heroku deployment url: [https://bwa-project.herokuapp.com](https://bwa-project.herokuapp.com)
+
 ## Must have features
+
+1. Implementation order:
+
+| Feature| Assignee      | Deadline  |
+| ------------- |:-------------:| -----:|
+| Help team to run project|Hai| During the first meeting|
+| Deploy dummy Heroku project | Hai | During the first meeting|
+| User registration Feature | Khoa | 1 Nov 2018 |
+| User login/logout Feature | Khoa      |   1 Nov 2018 |
+| Friendship Feature | Khoa and Hai      |    12 Nov 2018 |
+| Discussions Feature | Joni | 12 Nov 2018|
+| Status in profile page feature | Khoa and Hai | 22 Nov 2018 |
+| Events Feature | Joni, Khoa and Hai | 22 Nov 2018 |
+
+Each feature will have its own implementation and test task to be done, since the design and research of the project has been executed and done during the first project meeting.
+The details of each features can be found in the project's gitlab issue board.
 
 ## Planned +2 features
 
+| Feature| Assignee      | Deadline  |
+| ------------- |:-------------:| -----:|
+| Setup PostgreSQL for team | Hai | During the first meeting |
+| Deploy Heroku project with PostgreSQL in production      | Hai      |   During the first meeting |
+| Using different apps for different parts in project | All team members      | Decided during the first meeting |
+|Using Bootstrap in templates| Khoa and Hai | Decided during the first meeting |
+| Writing and maintaining unit tests for project | Hai | Deadline is similar to each features' deadline which can be found in "Must have features section" |
+| Email verification | Khoa and Hai | 30 Nov 2018 |
+| Password reset | Khoa and Hai | 30 Nov 2018 |
+| Notification feature | All members | 6 Dec 2018 |
+
+The estimated total stars we are planning to achieve is 14 stars.
+
 ## Pages and navigation
+
+Before seeing the site map, there are two important notices:
+
+* All pages after logging in can go back to the profile view (there will be a button to go back to that view).
+* The web application will present a navigation bar that will help to jump between pages easily - that is hard to present in the site map.
+
+Here is the site map (drew during the second project meeting):
+
+![alt text](site_map.jpg "Project site map")
 
 ## Technological considerations
 
 ### Django apps in your Django project
 
+We are going to have 5 Django apps:
+1. Users: ```/users``` This app will manage users of the project, registration, authentication, email verification and password reset.
+2. Profile: ```/profile``` This app will manage user's statuses in profile, users' friend list.
+3. Discussions: ```/discussions``` This app will manage user's discussions
+4. Events: ```/events``` This app will manage user's events
+5. Notifications *(Optional)*: ```/notifications``` This app will manage user's notifications
+
 ### Needed Django models and their attributes
+
+During the first meeting we have already defined a map for models in the app.
+
+![alt text](models.jpg "Project models")
 
 ### URIs
 
+* For ```users``` app, we will have:
+1. ```/```: home page
+2. ```/login```: Login page
+3. ```/logout```: Logout page
+4. ```/about```: Some info about our group
+5. ```/register```: Registration page
+* For ```profile``` app, we will have:
+1. ```/profile```: main page of profile that will show user's statuses
+2. ```/profile/friends```: Showing friend lists and manage friend list
+* For ```discussions``` app, we will have:
+1. ```/discussions```: main page that shows all discussions that can be seen from that user in a time order.
+2. ```/discussions/new```: view for adding a new discussion.
+3. ```/discussions/:id```: view a single discussion.
+* For ```events``` app, we will have:
+1. ```/events```: main page that shows all events that can be seen from that user in a time order.
+2. ```/events/new```: view for adding a new event.
+3. ```/events/:id```: view a single event.
+* For ```notifications``` app, we will have:
+1. ```/notifications```: this is not really accessible from user, this route will return results that list user's notifications.
+
 ### Needed Django views and templates
+
+1. Views: Every uri defined above will have its own view. The parameter has been defined in the uri itself, which is ```:<parameter_name>```. All above views will render a template, except for the ```notifications``` route, it will render a JSON response for the front-end to do AJAX to fetch notifications.
+
+2. Templates: N/A
 
 ### Heroku deployment
 
+As mentioned in the group information, here is the heroku deployment url: [https://bwa-project.herokuapp.com](https://bwa-project.herokuapp.com)
+
 ## Testing
 
+Hai will be responsible for project testing.
+
+We will be following Test Driven Development, which we have a convention that each team member will submit a merge request for every change to ```master```. In order for it to be merged, Hai will help to write unit tests for the features.
+
+We will also be doing manual testing, that is using the app as a normal user and see if anything behaves unexpectedly.
+
 ## Project timetable and division of work
+
+As mentioned in the section of mandatory and plus features, all assignees for each features have been defined.
+
+Each member will commit at least 10 hours of work each week.
+
+Hai as the project team leader will be responsible for gitlab issues creation and assigning.
 
 >>>
 _`The Django project in this repo (bwa2018djangoproject), was created for the groups using Heroku Django Starter Template. The information about it left here for educational purposes. The groups are free to remove this text and all the text below it from this file.`_
