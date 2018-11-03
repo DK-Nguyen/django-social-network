@@ -30,6 +30,7 @@ def profile(request):
     return render(request, 'users/profile.html')
 
 
+@login_required
 def change_info(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
