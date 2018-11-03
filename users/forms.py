@@ -1,4 +1,3 @@
-import re
 from django import forms
 from users.models import SiteUser
 from django.contrib.auth.forms import UserCreationForm
@@ -29,3 +28,15 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = SiteUser
         fields = UserCreationForm.Meta.fields + ('first_name', 'last_name', 'address', 'phone_number', 'bio')
+
+
+class UserUpdateForm(forms.ModelForm):
+    address = forms.CharField(required=True, label='Your new Address')
+    first_name = forms.CharField(required=True, max_length=150, label="Your new First Name")
+    last_name = forms.CharField(required=True, max_length=150, label="Your new Last Name")
+    phone_number = forms.CharField(label="Your new phone number", required=True)
+    bio = forms.CharField(required=False, label='Write something new about yourself')
+
+    class Meta:
+        model = SiteUser
+        fields = ['first_name', 'last_name', 'address', 'phone_number', 'bio', 'profile_picture']

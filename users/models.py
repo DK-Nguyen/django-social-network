@@ -17,8 +17,3 @@ class SiteUser(AbstractUser):
     def name(self):
         return self.first_name + self.last_name
 
-#
-# class Profile(models.Model):
-#     # when a user is deleted, also delete the profile, but not otherwise
-#     user = models.OneToOneField(SiteUser, on_delete=models.CASCADE)
-#
