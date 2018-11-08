@@ -8,6 +8,9 @@ class Discussion(models.Model):
     description = models.TextField(blank=True)
     created_time = models.DateTimeField(auto_now_add=True)
 
+    def get_absolute_url(self):
+        return "/discussion/%i/" % self.id
+
 
 class DiscussionComment(models.Model):
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE)
