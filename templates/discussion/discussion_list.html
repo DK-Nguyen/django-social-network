@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+    {% for discussion in discussions %}
+    <div class="content-section">
+        <h4>{{ discussion.title }}</h4>
+        <div class="row justify-content-center">
+            <div class="col">
+            <img src="{{ discussion.author.profile_image }}" width="26" height="26" alt="author-avatar" class="rounded-circle" />
+            {{ discussion.author.name }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>{{ discussion.description }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-sm btn-info" href="{% url 'discussion' discussion_id=5 %}">
+                    Comment <span class="badge badge-light">{{ discussion.number_of_comments }}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock content %}
+{% block actions %}
+    <a class="btn btn-success" href="{% url 'new_discussion' %}">
+        New discussion
+    </a>
+{% endblock %}
