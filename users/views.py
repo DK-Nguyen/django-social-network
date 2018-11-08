@@ -34,6 +34,15 @@ def profile(request):
     return render(request, 'users/profile.html', context)
 
 
+def other_profile(request, pk=None):
+    if pk:
+        user = SiteUser.objects.get(pk=pk)
+    else:
+        user = request.user
+    args = {'user': user}
+    return render(request, 'users/other_profiles.html', args)
+
+
 @login_required
 def change_info(request):
     if request.method == 'POST':

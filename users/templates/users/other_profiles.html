@@ -12,15 +12,5 @@
           <p class="text-secondary">{{ user.bio }}</p>
         </div>
       </div>
-      <a class="btn btn-default" href="{% url 'change_info' %} ">Change Your Information</a>
     </div>
 {% endblock content %}
-
-{% block content2 %}
-    <h2> Friends </h2>
-    {% for user in users %}
-        <a href="{% url 'profile_with_pk' pk=user.pk %}">
-            <p>{{ user.username }}</p>
-        </a>
-    {% endfor %}
-{% endblock content2 %}
