@@ -5,4 +5,5 @@ urlpatterns = [
     url(r'discussions/$', discussion_view.discussions, name='discussions'),
     url(r'discussions/new/$', discussion_view.new_discussion, name='new_discussion'),
     url(r'discussions/(\d{id})/$', discussion_view.discussion, name='discussion'),
+    url(r'discussions/(\d{id})/edit/$', discussion_view.edit_discussion, name='edit_discussion'),
 ]

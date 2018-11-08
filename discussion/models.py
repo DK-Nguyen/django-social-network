@@ -17,5 +17,5 @@ class DiscussionComment(models.Model):
 
 
 class DiscussionParticipant(models.Model):
-    participant_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    participant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE)
