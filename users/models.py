@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractUser
 class SiteUser(AbstractUser):
     first_name = models.CharField(max_length=30, blank=False)
     last_name = models.CharField(max_length=150, blank=False)
-    email = models.EmailField(blank=False)
+    email = models.EmailField(blank=False, unique=True)
     email_verified = models.BooleanField(null=False, default=False)
     phone_number = models.CharField(max_length=15, blank=False)
     address = models.TextField(blank=False)
@@ -17,8 +17,3 @@ class SiteUser(AbstractUser):
     def name(self):
         return self.first_name + self.last_name
 
-#
-# class Profile(models.Model):
-#     # when a user is deleted, also delete the profile, but not otherwise
-#     user = models.OneToOneField(SiteUser, on_delete=models.CASCADE)
-#
