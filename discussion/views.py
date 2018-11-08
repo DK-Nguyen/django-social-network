@@ -6,7 +6,19 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def discussions(request):
-    return render(request, 'discussions.html')
+    single_discussion = {
+        'title': 'My test discussion',
+        'description': 'My test discription which is much longer than the normal discussion',
+        'author': {
+            'name': request.user.name(),
+            'profile_image': request.user.profile_picture.url
+        },
+        'number_of_comments': 10
+    }
+    context = {
+        'discussions': [single_discussion, single_discussion]
+    }
+    return render(request, 'discussion/discussion_list.html', context=context)
 
 
 @login_required
@@ -46,5 +58,5 @@ def edit_discussion(request):
 
 
 @login_required
-def discussion(request):
-    return render(request, 'discussion.html')
+def discussion(request, discussion_id):
+    return render(request, 'discussion/discussion_list.html')
