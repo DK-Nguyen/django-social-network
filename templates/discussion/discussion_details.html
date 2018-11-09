@@ -1,6 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="content-section">
-        This is disscussion detail view
+        <h4>{{ discussion.title }}</h4>
+        <div class="row justify-content-center">
+            <div class="col">
+            <img src="{{ discussion.owner.profile_picture.url }}" width="26" height="26" alt="author-avatar" class="rounded-circle" />
+            <span>{{ discussion.owner.name }}</span>
+            <span>on {{ discussion.created_time|date }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>{{ discussion.description }}</p>
+            </div>
+        </div>
     </div>
+    <div style="margin-bottom: 25px">
+    <div class="input-group">
+      <input type="text" class="form-control" aria-label="comment field">
+      <div class="input-group-append">
+        <button type="button" class="btn btn-outline-primary">Comment</button>
+      </div>
+    </div>
+    </div>
+        {% for comment in comments %}
+            <div class="content-section">
+                <div class="row justify-content-center">
+                <div class="col">
+                <img src="{{ comment.commenter.profile_picture.url }}" width="20" height="20" alt="author-avatar" class="rounded-circle" />
+                <span>{{ comment.commenter.name }}</span>
+                    <span>{{ comment.content }}</span>
+                <span>on {{ discussion.created_time|date }}</span>
+                </div>
+        </div>
+            </div>
+        {% endfor %}
 {% endblock content %}

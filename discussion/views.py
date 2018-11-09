@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import DiscussionCreationForm, DiscussionUpdateForm
+from .models import Discussion, DiscussionComment
 from django.contrib.auth.decorators import login_required
 
 from .models import *
@@ -8,17 +9,9 @@ from .models import *
 
 @login_required
 def discussions(request):
-    single_discussion = {
-        'title': 'My test discussion',
-        'description': 'My test discription which is much longer than the normal discussion',
-        'author': {
-            'name': request.user.name(),
-            'profile_image': request.user.profile_picture.url
-        },
-        'number_of_comments': 10
-    }
+    all_discussions = Discussion.objects.all()
     context = {
-        'discussions': [single_discussion, single_discussion]
+        'discussions': all_discussions
     }
     return render(request, 'discussion/discussion_list.html', context=context)
 
@@ -61,4 +54,13 @@ def edit_discussion(request):
 
 @login_required
 def discussion(request, discussion_id):
-    return render(request, Discussion)
+    current_discussion = Discussion.objects.get(id=discussion_id)
+    comments = DiscussionComment.objects.filter(discussion=current_discussion)
+    participants = DiscussionParticipant.objects.filter(discussion=current_discussion)
+    context = {
+        'discussion': current_discussion,
+        'comments': comments,
+        'participants': participants
+    }
+
+    return render(request, 'discussion/discussion_details.html', context)
