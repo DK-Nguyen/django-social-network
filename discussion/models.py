@@ -11,6 +11,9 @@ class Discussion(models.Model):
     def get_absolute_url(self):
         return "/discussion/%i/" % self.id
 
+    class Meta:
+        ordering = ['created_time']
+
 
 class DiscussionComment(models.Model):
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE)
