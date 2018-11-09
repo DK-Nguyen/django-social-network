@@ -38,7 +38,7 @@ def new_discussion(request):
         'form': form,
     }
 
-    return render(request, Discussion, context)
+    return render(request, 'discussion/discussion_new.html', context)
 
 
 @login_required
@@ -46,9 +46,9 @@ def edit_discussion(request):
     if request.method == 'POST':
         form = DiscussionUpdateForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            form.save()
+            m = form.save()
             messages.success(request, 'Discussion has been updated')
-            return redirect(Discussion)
+            return redirect(m.get_absolute_url())
     else:
         form = DiscussionUpdateForm(instance=request.user)
 
@@ -56,9 +56,9 @@ def edit_discussion(request):
         'form': form,
     }
 
-    return render(request, Discussion, context)
+    return render(request, 'discussion/discussion_edit.html', context)
 
 
 @login_required
 def discussion(request, discussion_id):
-    return render(request, Discussion)
+    return render(request, 'discussion/discussion_details.html')
