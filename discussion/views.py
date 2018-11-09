@@ -28,9 +28,9 @@ def new_discussion(request):
     if request.method == 'POST':
         form = DiscussionCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            m = form.save()
             messages.success(request, 'Discussion has been created')
-            return redirect(Discussion)
+            return redirect(m.get_absolute_url())
     else:
         form = DiscussionCreationForm()
 

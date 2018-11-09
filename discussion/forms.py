@@ -19,7 +19,7 @@ class DiscussionCreationForm(forms.Form):
 
     class Meta:
         model = Discussion
-        fields = forms.Form.Meta.fields + ('title', 'description', 'participants')
+        fields = ['title', 'description', 'participants']
 
 
 class DiscussionUpdateForm(forms.ModelForm):
