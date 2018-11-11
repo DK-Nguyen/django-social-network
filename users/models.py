@@ -13,6 +13,7 @@ class SiteUser(AbstractUser):
     address = models.TextField(blank=False)
     bio = models.TextField(blank=True)
     profile_picture = models.ImageField(default='default.jpg', upload_to='profile_pictures/')
+    friends = models.ManyToManyField("SiteUser", related_name='user_friends', blank=True)
 
     def name(self):
         return self.first_name + self.last_name
