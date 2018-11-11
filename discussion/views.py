@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import DiscussionCreationForm, DiscussionUpdateForm
-from .models import Discussion, DiscussionComment
+from django.http import JsonResponse, Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from .forms import DiscussionCreationForm, DiscussionUpdateForm, DiscussionCommentForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 
 from .models import *
 
@@ -21,9 +22,20 @@ def new_discussion(request):
     if request.method == 'POST':
         form = DiscussionCreationForm(request.POST)
         if form.is_valid():
-            m = form.save()
+            cleaned_data = form.cleaned_data
+            added_discussion = Discussion(
+                title=cleaned_data.get('title'),
+                description=cleaned_data.get('description'),
+                owner=request.user
+            )
+            added_discussion.save()
+            self_participation = DiscussionParticipant(
+                participant=request.user,
+                discussion=added_discussion
+            )
+            self_participation.save()
             messages.success(request, 'Discussion has been created')
-            return redirect(m.get_absolute_url())
+            return redirect(added_discussion.get_absolute_url())
     else:
         form = DiscussionCreationForm()
 
@@ -31,36 +43,105 @@ def new_discussion(request):
         'form': form,
     }
 
-    return render(request, Discussion, context)
+    return render(request, 'discussion/discussion_new.html', context)
 
 
 @login_required
-def edit_discussion(request):
+def edit_discussion(request, discussion_id):
+    discussion_to_update = Discussion.objects.get(id__exact=discussion_id)
     if request.method == 'POST':
-        form = DiscussionUpdateForm(request.POST, request.FILES, instance=request.user)
+        form = DiscussionUpdateForm(request.POST, instance=discussion_to_update)
         if form.is_valid():
-            form.save()
+            edited_discussion = form.save()
             messages.success(request, 'Discussion has been updated')
-            return redirect(Discussion)
+            return redirect(edited_discussion.get_absolute_url())
     else:
-        form = DiscussionUpdateForm(instance=request.user)
+        form = DiscussionUpdateForm(instance=discussion_to_update)
 
     context = {
         'form': form,
     }
 
-    return render(request, Discussion, context)
+    return render(request, 'discussion/discussion_edit.html', context)
 
 
 @login_required
 def discussion(request, discussion_id):
     current_discussion = Discussion.objects.get(id=discussion_id)
-    comments = DiscussionComment.objects.filter(discussion=current_discussion)
     participants = DiscussionParticipant.objects.filter(discussion=current_discussion)
+    find_user_participate = DiscussionParticipant.objects.filter(
+        discussion=current_discussion,
+        participant=request.user
+    )
+    is_owner = request.user == current_discussion.owner
+    is_participating = len(find_user_participate) > 0
     context = {
         'discussion': current_discussion,
-        'comments': comments,
-        'participants': participants
+        'participants': participants,
+        'is_participating': is_participating,
+        'is_owner': is_owner
     }
 
     return render(request, 'discussion/discussion_details.html', context)
+
+
+@login_required
+@require_http_methods(["GET"])
+def get_comments(request, discussion_id):
+    try:
+        current_discussion = Discussion.objects.get(id=discussion_id)
+        comments = DiscussionComment.objects.filter(discussion=current_discussion)
+        response = []
+        for comment in comments:
+            response.append({
+                'id': comment.id,
+                'content': comment.content,
+                'created_time': comment.created_time.isoformat(),
+                'commenter': {
+                    'name': comment.commenter.name(),
+                    'profile_picture': comment.commenter.profile_picture.url
+                }
+            })
+        return JsonResponse({'comments': response})
+    except Discussion.DoesNotExist:
+        return Http404('Discussion not found')
+
+
+@login_required
+@require_http_methods(["POST"])
+def post_comments(request, discussion_id):
+    try:
+        current_discussion = Discussion.objects.get(id=discussion_id)
+        participants = DiscussionParticipant.objects.filter(discussion=current_discussion, participant=request.user)
+        if len(participants) == 0:
+            return HttpResponseForbidden('You cannot comment to this discussion!')
+        form = DiscussionCommentForm(request.POST)
+        if form.is_valid():
+            new_comment = DiscussionComment(
+                content=form.cleaned_data.get('content'),
+                commenter=request.user,
+                discussion=current_discussion
+            )
+            new_comment.save()
+            return HttpResponse('OK')
+        return HttpResponseBadRequest('Not a valid comment')
+    except Discussion.DoesNotExist:
+        return Http404('Discussion not found')
+
+
+@login_required()
+@require_http_methods(["DELETE"])
+def delete_comment(request, discussion_id, comment_id):
+    try:
+        current_discussion = Discussion.objects.get(id=discussion_id)
+        current_comment = DiscussionComment.objects.get(id=comment_id)
+        commenter = current_comment.commenter
+        discussion_owner = current_discussion.owner
+        if request.user == commenter or request.user == discussion_owner:
+            current_comment.delete()
+            return HttpResponse('OK')
+        return HttpResponseForbidden('You cannot delete this comment')
+    except Discussion.DoesNotExist:
+        return Http404('Discussion not found')
+    except DiscussionComment.DoesNotExist:
+        return Http404('comment not found')

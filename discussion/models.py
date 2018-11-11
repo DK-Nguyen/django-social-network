@@ -9,7 +9,7 @@ class Discussion(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
 
     def get_absolute_url(self):
-        return "/discussion/%i/" % self.id
+        return "/discussions/%i/" % self.id
 
     class Meta:
         ordering = ['created_time']
@@ -20,6 +20,9 @@ class DiscussionComment(models.Model):
     commenter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(blank=False)
     created_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_time']
 
 
 class DiscussionParticipant(models.Model):
