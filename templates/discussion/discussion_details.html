@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="content-section">
+        <h4>{{ discussion.title }}</h4>
+        <div class="row justify-content-center">
+            <div class="col">
+                <img src="{{ discussion.owner.profile_picture.url }}" width="26" height="26" alt="author-avatar"
+                     class="rounded-circle"/>
+                <span>{{ discussion.owner.name }}</span>
+                <span>on {{ discussion.created_time|date }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>{{ discussion.description }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {% if is_owner %}
+                    <a class="btn btn-primary btn-sm" href="{% url 'edit_discussion' discussion_id=discussion.id %}">
+                        Edit
+                    </a>
+                {% endif %}
+                {%  if is_participating %}
+                    <a class="btn btn-danger btn-sm" href="{% url 'leave_discussion' discussion_id=discussion.id %}">
+                        Leave
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div style="margin-bottom: 25px">
+        {% if is_participating %}
+            <div class="input-group">
+                <input id="new_comment_content" type="text" class="form-control" aria-label="comment field">
+                <div class="input-group-append">
+                    <button onclick="submitComment()" type="button" class="btn btn-outline-primary">Comment</button>
+                </div>
+                <span id="new_comment_error_message" style="color: red;"/>
+            </div>
+        {% endif %}
+    </div>
+    <div id="comments"></div>
+
+{% endblock content %}
+{% block actions %}
+    <div class="content-section">
+
+        <div class="input-group">
+            <input id="search-friend" type="text" class="form-control" aria-label="search friend field"
+                   placeholder="Add friend"/>
+            <div class="input-group-append">
+                    <button onclick="handleSearchFriend()" type="button" class="btn btn-outline-primary">Search</button>
+                </div>
+        </div>
+        <ul class="list-group" id="search-friend-result">
+
+        </ul>
+    </div>
+{% endblock %}
+{% block content2 %}
+    <div class="content-section">
+        <h3>Participants in this discussion</h3>
+        {#        <p class='text-muted'>Created Login and Logout#}
+        <ul class="list-group">
+            {% for participant in participants %}
+                <li class="list-group-item list-group-item-light">
+                    <div class="row">
+                        <div class="col-2">
+                            <img src="{{ participant.participant.profile_picture.url }}" width="30" height="30"/>
+                        </div>
+                        <div class="col">
+                            <p>{{ participant.participant.name }}</p>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        </p>
+    </div>
+{% endblock %}
+{% block custom_js %}
+    <script type="text/javascript">
+        {% autoescape off %}
+            function getComments() {
+                jQuery.get('/discussions/{{ discussion.id }}/comments')
+                    .done(function fetchCommentSuccess(data) {
+                        const comments = data.comments;
+                        $('#comments').empty()
+                        comments.forEach(function renderComment(comment) {
+                            $('#comments').append(createCommentRow(comment));
+                        })
+                    })
+            }
+
+            function createCommentRow(comment) {
+                return "<div class=\"content-section\">\n" +
+                    "            <div class=\"row justify-content-center\">\n" +
+                    "                <div class=\"col\">\n" +
+                    "                    <img src=\" " + comment.commenter.profile_picture + "\" width=\"20\" height=\"20\" alt=\"author-avatar\"\n" +
+                    "                         class=\"rounded-circle\"/>\n" +
+                    "                    <span> " + comment.commenter.name + "</span>\n" +
+                    "                    <span> " + comment.content + "</span>\n" +
+                    "                    <span>on " + new Date(comment.created_time).toDateString() + "</span>\n" +
+                    "                </div>\n" +
+                    "                <div class=\"col-2\">\n" +
+                    "                    <button "+ (comment.can_delete ? "" : "hidden") + " onclick=\"handleClickDeleteComment(" + comment.id + ")\" class=\"delete-comment btn btn-danger btn-sm\">" +
+                    "                        Delete" +
+                    "                    </button>" +
+                    "                </div>\n" +
+                    "            </div>\n" +
+                    "        </div>"
+            }
+
+
+            function handleClickDeleteComment(commentId) {
+                jQuery.ajax({
+                    method: 'delete',
+                    url: '/discussions/{{ discussion.id }}/comments/' + commentId + '/',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')}
+                })
+                    .fail(function postCommentFail() {
+                        $('#new_comment_error_message').text = 'Something went wrong :('
+                    })
+                    .done(function postCommentSuccess() {
+                        getComments()
+                    })
+            }
+
+            function submitComment() {
+                const commentContent = $('#new_comment_content').val();
+                jQuery.ajax({
+                    method: 'post',
+                    url: '/discussions/{{ discussion.id }}/comments/new',
+                    data: {content: commentContent},
+                    headers: {'X-CSRFToken': getCookie('csrftoken')}
+                })
+                    .fail(function postCommentFail() {
+                        $('#new_comment_error_message').text = 'Something went wrong :('
+                    })
+                    .done(function postCommentSuccess() {
+                        $('#new_comment_content').val('')
+                        getComments()
+                    })
+            }
+
+            function handleSearchFriend() {
+                const query = $('#search-friend').val();
+
+                    query.length > 2 && performFriendSearch(
+                        query,
+                        function inviteFriendSearchResponse(err, friends) {
+                            if (err) {
+                                return;
+                            }
+                            $('#search-friend-result').empty();
+                            friends.forEach(function (friend) {
+                                $('#search-friend-result').append(buildSearchResultRow(friend));
+                            });
+                        }
+                    );
+
+            };
+
+            function addFriendAsParticipant(friendid) {
+                jQuery.ajax({
+                    method: 'post',
+                    url: '/discussions/{{ discussion.id }}/participants/new/' + friendid + '/',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')}
+                }).done(function addParticipantSuccess() {
+                    window.reload()
+                })
+            }
+
+            function buildSearchResultRow(friend) {
+                return '<li class="list-group-item list-group-item-light">\n' +
+                    '                    <div class="row">\n' +
+                    '                        <div class="col-2">\n' +
+                    '                            <img src="' + friend.profile_picture + '" width="30" height="30"/>\n' +
+                    '                        </div>\n' +
+                    '                        <div class="col">\n' +
+                    '                            <p>' + friend.name + '</p>\n' +
+                    '                        </div>\n' +
+                    '                        <div class="col-3">' +
+                    '                            <button onclick="addFriendAsParticipant(' + friend.id + ')" class="btn btn-primary btn-sm">Invite</button>' +
+                    '                        </div>' +
+                    '                    </div>\n' +
+                    '                </li>'
+            }
+
+            $(document).ready(function discussionDetailPageReady() {
+                getComments();
+                setInterval(getComments, 7000);
+            });
+        {% endautoescape %}
+    </script>
+{% endblock %}

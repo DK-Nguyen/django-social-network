@@ -1,4 +1,4 @@
-{% extends "users/base.html" %}
+{% extends "base.html" %}
 {% block content %}
     <div class="content-section">
       <div class="media">
@@ -6,12 +6,11 @@
         <div class="media-body">
           <h2 class="account-heading">{{ user.username }}</h2>
           <p class="text-secondary">{{ user.first_name }}</p>
-          <p class="text-secondary">{{ user.email }}</p>
+{#          <p class="text-secondary">{{ user.email }}</p>#}
           <p class="text-secondary">{{ user.adress }}</p>
           <p class="text-secondary">{{ user.phone_number }}</p>
           <p class="text-secondary">{{ user.bio }}</p>
         </div>
       </div>
-      <a class="btn btn-default" href="{% url 'change_info' %} ">Change Your Information</a>
     </div>
 {% endblock content %}
