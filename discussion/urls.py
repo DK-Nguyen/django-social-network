@@ -8,5 +8,7 @@ urlpatterns = [
     path('discussions/<int:discussion_id>/edit/', discussion_view.edit_discussion, name='edit_discussion'),
     path('discussions/<int:discussion_id>/comments/new', discussion_view.post_comments, name='new_comment'),
     path('discussions/<int:discussion_id>/comments/', discussion_view.get_comments, name='fetch_comments'),
-    path('discussions/<int:discussion_id>/comments/<int:comment_id>/', discussion_view.delete_comment, name="delete_comments")
+    path('discussions/<int:discussion_id>/comments/<int:comment_id>/', discussion_view.delete_comment, name="delete_comments"),
+    path('discussions/<int:discussion_id>/participants/new/<int:friend_id>/', discussion_view.invite_participant, name="invite_participant"),
+    path('discussions/<int:discussion_id>/leave', discussion_view.leave_discussion, name="leave_discussion")
 ]

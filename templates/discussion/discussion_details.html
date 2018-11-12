@@ -22,6 +22,11 @@
                         Edit
                     </a>
                 {% endif %}
+                {%  if is_participating %}
+                    <a class="btn btn-danger btn-sm" href="{% url 'leave_discussion' discussion_id=discussion.id %}">
+                        Leave
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -38,6 +43,44 @@
     </div>
     <div id="comments"></div>
 
+{% endblock content %}
+{% block actions %}
+    <div class="content-section">
+
+        <div class="input-group">
+            <input id="search-friend" type="text" class="form-control" aria-label="search friend field"
+                   placeholder="Add friend"/>
+            <div class="input-group-append">
+                    <button onclick="handleSearchFriend()" type="button" class="btn btn-outline-primary">Search</button>
+                </div>
+        </div>
+        <ul class="list-group" id="search-friend-result">
+
+        </ul>
+    </div>
+{% endblock %}
+{% block content2 %}
+    <div class="content-section">
+        <h3>Participants in this discussion</h3>
+        {#        <p class='text-muted'>Created Login and Logout#}
+        <ul class="list-group">
+            {% for participant in participants %}
+                <li class="list-group-item list-group-item-light">
+                    <div class="row">
+                        <div class="col-2">
+                            <img src="{{ participant.participant.profile_picture.url }}" width="30" height="30"/>
+                        </div>
+                        <div class="col">
+                            <p>{{ participant.participant.name }}</p>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        </p>
+    </div>
+{% endblock %}
+{% block custom_js %}
     <script type="text/javascript">
         {% autoescape off %}
             function getComments() {
@@ -61,8 +104,8 @@
                     "                    <span> " + comment.content + "</span>\n" +
                     "                    <span>on " + new Date(comment.created_time).toDateString() + "</span>\n" +
                     "                </div>\n" +
-                    "                <div class=\"col-1\">\n" +
-                    "                    <button onclick=\"handleClickDeleteComment(" + comment.id + ")\" class=\"delete-comment btn btn-warning btn-sm\">" +
+                    "                <div class=\"col-2\">\n" +
+                    "                    <button "+ (comment.can_delete ? "" : "hidden") + " onclick=\"handleClickDeleteComment(" + comment.id + ")\" class=\"delete-comment btn btn-danger btn-sm\">" +
                     "                        Delete" +
                     "                    </button>" +
                     "                </div>\n" +
@@ -102,10 +145,54 @@
                     })
             }
 
-            $(document).ready(function () {
+            function handleSearchFriend() {
+                const query = $('#search-friend').val();
+
+                    query.length > 2 && performFriendSearch(
+                        query,
+                        function inviteFriendSearchResponse(err, friends) {
+                            if (err) {
+                                return;
+                            }
+                            $('#search-friend-result').empty();
+                            friends.forEach(function (friend) {
+                                $('#search-friend-result').append(buildSearchResultRow(friend));
+                            });
+                        }
+                    );
+
+            };
+
+            function addFriendAsParticipant(friendid) {
+                jQuery.ajax({
+                    method: 'post',
+                    url: '/discussions/{{ discussion.id }}/participants/new/' + friendid + '/',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')}
+                }).done(function addParticipantSuccess() {
+                    window.reload()
+                })
+            }
+
+            function buildSearchResultRow(friend) {
+                return '<li class="list-group-item list-group-item-light">\n' +
+                    '                    <div class="row">\n' +
+                    '                        <div class="col-2">\n' +
+                    '                            <img src="' + friend.profile_picture + '" width="30" height="30"/>\n' +
+                    '                        </div>\n' +
+                    '                        <div class="col">\n' +
+                    '                            <p>' + friend.name + '</p>\n' +
+                    '                        </div>\n' +
+                    '                        <div class="col-3">' +
+                    '                            <button onclick="addFriendAsParticipant(' + friend.id + ')" class="btn btn-primary btn-sm">Invite</button>' +
+                    '                        </div>' +
+                    '                    </div>\n' +
+                    '                </li>'
+            }
+
+            $(document).ready(function discussionDetailPageReady() {
                 getComments();
-                setInterval(getComments, 7000)
+                setInterval(getComments, 7000);
             });
         {% endautoescape %}
     </script>
-{% endblock content %}
+{% endblock %}

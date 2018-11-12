@@ -15,6 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
 
     <script src="{% static "getCookie.js" %}"></script>
+    <script src="{% static "searchFriend.js" %}"></script>
 
     {% if title %}
         <title>Django Social Network - {{ title }}</title>
@@ -64,19 +65,13 @@
         </div>
         <div class="col-md-4">
             {% block actions %}{% endblock %}
-          <div class="content-section">
-            <h3>31/10/2018</h3>
-            <p class='text-muted'>Created Login and Logout
-              <ul class="list-group">
-                <li class="list-group-item list-group-item-light">Click Login to Login</li>
-                <li class="list-group-item list-group-item-light">When loged in, the nav bar would change</li>
-              </ul>
-            </p>
+            {% block content2 %}{% endblock %}
           </div>
         </div>
       </div>
     </main>
-
+    {% block custom_js %}
+    {% endblock %}
     <!-- Optional JavaScript -->
     <!-- Popper.js, then Bootstrap JS -->
 
