@@ -57,7 +57,7 @@ def delete_friend_request(request, id):
 @require_http_methods(["GET"])
 def search_friend(request):
     query = request.GET.get('query')
-    if len(query) < 3:
+    if len(query) < 1:
         return HttpResponseBadRequest('Search query too short')
     search_friends = request.user.friends.filter(first_name__startswith=query)[:10]
     response = []

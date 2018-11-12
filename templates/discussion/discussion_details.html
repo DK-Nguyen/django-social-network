@@ -45,6 +45,7 @@
 
 {% endblock content %}
 {% block actions %}
+    {% if is_participating %}
     <div class="content-section">
 
         <div class="input-group">
@@ -58,6 +59,7 @@
 
         </ul>
     </div>
+    {% endif %}
 {% endblock %}
 {% block content2 %}
     <div class="content-section">
@@ -148,7 +150,7 @@
             function handleSearchFriend() {
                 const query = $('#search-friend').val();
 
-                    query.length > 2 && performFriendSearch(
+                    query.length > 0 && performFriendSearch(
                         query,
                         function inviteFriendSearchResponse(err, friends) {
                             if (err) {
