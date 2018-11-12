@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
+    'friends.apps.FriendsConfig',
     'discussion.apps.DiscussionConfig'
 ]
 

@@ -15,3 +15,40 @@
       <a class="btn btn-default" href="{% url 'change_info' %} ">Change Your Information</a>
     </div>
 {% endblock content %}
+
+{% block content2 %}
+    <h2> Friends </h2>
+    {% for friend in friends %}
+        <a href="{% url 'friend_profile' pk=friend.pk %}">
+            <p>{{ friend.username }}</p>
+        </a>
+
+    {% endfor %}
+
+    <h2> Others </h2>
+    {% for user in other_users %}
+        {% if not user in friends %}
+            <a href="{% url 'profile_with_pk' pk=user.pk %}">
+                <p>{{ user.username }}</p>
+            </a>
+            {% if user.id in received_from_ids %} <!-- if the user has sent me a friend request -->
+                <a href="{% url 'accept_request' id=user.id %} "> <!-- I can accept the request -->
+                    <button type="button" class="btn btn-primary">Accept</button>
+                </a>
+                <a href="{% url 'delete_request' id=user.id %} "> <!-- or I can ignore and delete the request -->
+                    <button type="button" class="btn btn-warning">Ignore</button>
+                </a>
+            {% else  %} <!-- if the user has not sent me friend request -->
+                {% if user.id in sent_to_ids  %} <!-- I have sent him a request -->
+                    <a href="{% url 'cancel_request' id=user.id %} "> <!-- I can cancel the request -->
+                        <button type="button" class="btn btn-danger">Cancel Friend Request</button>
+                    </a>
+                {% else %} <!-- I have not yet sent him a equest -->
+                    <a href="{% url 'send_request' id=user.id %} ">
+                        <button type="button" class="btn btn-success">Send Friend Request</button>
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endblock content2 %}
