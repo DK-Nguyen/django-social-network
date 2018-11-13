@@ -59,7 +59,7 @@ def search_friend(request):
     query = request.GET.get('query')
     if len(query) < 1:
         return HttpResponseBadRequest('Search query too short')
-    search_friends = request.user.friends.filter(first_name__startswith=query)[:10]
+    search_friends = request.user.friends.filter(first_name__istartswith=query)[:10]
     response = []
     for friend in search_friends:
         response.append({
