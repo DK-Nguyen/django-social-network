@@ -1,6 +1,7 @@
 .idea/*
 db.sqlite3
 media/profile_pictures/*.*
+bwa2018djangoproject/.idea/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

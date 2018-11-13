@@ -4,6 +4,7 @@ from django.http import JsonResponse, Http404, HttpResponse, HttpResponseBadRequ
 from .forms import DiscussionCreationForm, DiscussionUpdateForm, DiscussionCommentForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
+from users.models import SiteUser
 
 from .models import *
 
@@ -86,6 +87,38 @@ def discussion(request, discussion_id):
 
 
 @login_required
+@require_http_methods(["POST"])
+def invite_participant(request, discussion_id, friend_id):
+    try:
+        friend = SiteUser.objects.get(id=friend_id)
+        discussion = Discussion.objects.get(id=discussion_id)
+        new_participant = DiscussionParticipant(participant=friend, discussion=discussion)
+        new_participant.save()
+        return redirect(discussion.get_absolute_url())
+    except SiteUser.DoesNotExist:
+        return Http404('Friend not found')
+    except Discussion.DoesNotExist:
+        return Http404('Discussion not found')
+    return HttpResponse('OK')
+
+
+@login_required
+def leave_discussion(request, discussion_id):
+    try:
+        discussion = Discussion.objects.get(id=discussion_id)
+        participant = DiscussionParticipant.objects.get(participant=request.user, discussion=discussion)
+        if (participant.discussion != discussion):
+            return HttpResponseBadRequest('Participant is not in this discussion!')
+        participant.delete()
+        return redirect('/discussions')
+    except SiteUser.DoesNotExist:
+        return Http404('Friend not found')
+    except DiscussionParticipant.DoesNotExist:
+        return Http404('Participant not found')
+    return HttpResponse('OK')
+
+
+@login_required
 @require_http_methods(["GET"])
 def get_comments(request, discussion_id):
     try:
@@ -100,7 +133,8 @@ def get_comments(request, discussion_id):
                 'commenter': {
                     'name': comment.commenter.name(),
                     'profile_picture': comment.commenter.profile_picture.url
-                }
+                },
+                'can_delete': comment.commenter == request.user or request.user == current_discussion.owner
             })
         return JsonResponse({'comments': response})
     except Discussion.DoesNotExist:
