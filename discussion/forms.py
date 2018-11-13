@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 class DiscussionCreationForm(forms.Form):
     title = forms.CharField(required=True, max_length=150, label="Discussion title")
     description = forms.CharField(required=False, label='Discussion description')
-    owner = "Owner"
 
     def clean(self):
         super(forms.Form, self).clean()
