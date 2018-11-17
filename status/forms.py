@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 
 class StatusCreationForm(forms.Form):
-    content = forms.CharField(required=True, label='What is on your mind')
+    content = forms.CharField(required=True, label='What is on your mind',)
     owner = "Owner"
 
     def clean(self):
