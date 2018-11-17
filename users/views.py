@@ -4,7 +4,7 @@ from .forms import UserRegisterForm, UserUpdateForm
 from django.contrib.auth.decorators import login_required
 from .models import SiteUser
 from friends.models import FriendRequest
-from friends.views import send_friend_request, accept_friend_request
+from status.models import Status
 
 
 def home(request):
@@ -35,6 +35,7 @@ def profile(request):
     other_users = SiteUser.objects.exclude(id=request.user.id)
     friends = request.user.friends.all()
     frequest = FriendRequest.objects.all()
+    statuses = Status.objects.all()
 
     sent_friend_requests = FriendRequest.objects.filter(from_user=request.user)
     received_friend_requests = FriendRequest.objects.filter(to_user=request.user)
@@ -53,6 +54,7 @@ def profile(request):
         'frequest': frequest,
         'sent_to_ids': sent_to_ids,
         'received_from_ids': received_from_ids,
+        'statuses': statuses,
     }
 
     return render(request, 'users/profile.html', context)

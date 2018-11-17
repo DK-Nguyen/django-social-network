@@ -14,6 +14,16 @@
       </div>
       <a class="btn btn-default" href="{% url 'change_info' %} ">Change Your Information</a>
     </div>
+
+    <div class="content-section">
+        <h2>Status</h2>
+        {% for status in statuses %}
+            <div class="content-section">
+                <p>{{ status.content }}</p>
+                <span>on {{ status.created_time|date }}</span>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock content %}
 
 {% block content2 %}
