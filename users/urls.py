@@ -4,7 +4,8 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls import url
 
 urlpatterns = [
-    path('', users_views.home, name='home'),
+    path('', users_views.profile, name='profile'),
+    path('home', users_views.home, name='home'),
     path('register/', users_views.register, name='register'),
     path('about/', users_views.about, name='about'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
@@ -14,6 +15,5 @@ urlpatterns = [
     path('profile/<int:pk>/', users_views.other_profile, name='profile_with_pk'),
     # url(r'^profile/(?P<pk>\d+)/$', users_views.profile, name='profile_with_pk'),
     path('profile/friends/<int:pk>/', users_views.friends_profile, name='friend_profile'),
-
 ]
 
