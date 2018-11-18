@@ -1,7 +1,7 @@
 from django.urls import path
-from . import views as discussion_view
+from . import views as status_view
 
 urlpatterns = [
-    # path('discussions/', discussion_view.discussions, name='discussions'),
-
+    path('<int:status_id>/', status_view.status_comments, name='status_comments'),
+    path('delete/<int:status_id>/', status_view.delete_status, name='delete_status'),
 ]

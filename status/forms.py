@@ -1,5 +1,5 @@
 from django import forms
-from .models import Status
+from .models import Status, StatusComment
 from django.core.exceptions import ValidationError
 
 
@@ -17,4 +17,11 @@ class StatusCreationForm(forms.Form):
         model = Status
         fields = ['content']
 
+
+class StatusCommentForm(forms.Form):
+    content = forms.CharField(required=True)
+
+    class Meta:
+        model = StatusComment
+        fields = ['content']
 

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="content-section">
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ user.profile_picture.url  }}">
+            <div class="media-body">
+                <h4>{{ user.first_name }} says:</h4>
+                <strong>{{ status.content }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="comment-section">
+        {% if comments %}
+            <h4> Comments </h4>
+            {% for comment in comments %}
+                <strong>{{ comment.content }}</strong>
+                <p>by {{ comment.commenter.username }}
+                    <img src="{{ comment.commenter.profile_picture.url }}" width="30" height="30"/>
+                    <span>on {{ comment.created_time|date }}</span>
+                </p>
+            {% endfor %}
+        {% else %}
+            <h4> No Comments </h4>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Comment</legend>
+                {{ comment_form.as_p }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
