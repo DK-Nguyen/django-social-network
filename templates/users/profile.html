@@ -14,12 +14,39 @@
       </div>
       <a class="btn btn-default" href="{% url 'change_info' %} ">Change Your Information</a>
     </div>
+
+    <div class="status-section">
+        <h2>Status</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                {{ status_form.as_p }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
+
+        {% for status in statuses %}
+            <div class="content-section">
+                <strong>{{ status.content }}</strong>
+                <p>on {{ status.created_time|date }}</p>
+                <a href="{% url 'status_comments' status_id=status.id %} ">
+                    <button type="button" class="btn btn-info">Comments</button>
+                </a>
+                <a href="{% url 'delete_status' status_id=status.id %} ">
+                    <button type="button" class="btn btn-danger">Delete This Status</button>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock content %}
 
 {% block content2 %}
     <h2> Friends </h2>
     {% for friend in friends %}
-        <a href="{% url 'friend_profile' pk=friend.pk %}">
+        <a href="{% url 'friend_profile' id=friend.id %}">
             <p>{{ friend.username }}</p>
         </a>
 
@@ -28,7 +55,7 @@
     <h2> Others </h2>
     {% for user in other_users %}
         {% if not user in friends %}
-            <a href="{% url 'profile_with_pk' pk=user.pk %}">
+            <a href="{% url 'profile_with_id' id=user.id %}">
                 <p>{{ user.username }}</p>
             </a>
             {% if user.id in received_from_ids %} <!-- if the user has sent me a friend request -->

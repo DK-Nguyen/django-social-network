@@ -22,8 +22,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
-    path('', include('discussion.urls')),
+    path('discussions/', include('discussion.urls')),
     path('friends/', include('friends.urls')),
+    path('status/', include('status.urls')),
 ]
 
 # if setting is DEBUG, then use the media folder to keep the static files (images, JavaScript, or CSS)

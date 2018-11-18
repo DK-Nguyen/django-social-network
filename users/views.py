@@ -4,7 +4,8 @@ from .forms import UserRegisterForm, UserUpdateForm
 from django.contrib.auth.decorators import login_required
 from .models import SiteUser
 from friends.models import FriendRequest
-from friends.views import send_friend_request, accept_friend_request
+from status.models import Status
+from status.forms import StatusCreationForm
 
 
 def home(request):
@@ -29,12 +30,48 @@ def register(request):
 
 
 @login_required
+def change_info(request):
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+        if u_form.is_valid():
+            u_form.save()
+            messages.success(request, f'Your account has been updated!')
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+
+    context = {
+        'u_form': u_form,
+    }
+
+    return render(request, 'users/change_info.html', context)
+
+
+@login_required
 def profile(request):
     # p = request.user
     # id_to_exclude = [i.id for i in request.user.friends.id]
     other_users = SiteUser.objects.exclude(id=request.user.id)
     friends = request.user.friends.all()
     frequest = FriendRequest.objects.all()
+    statuses = Status.objects.filter(owner_id=request.user.id)
+    status_list = []
+    for status in statuses:
+        status_list.append(status)
+
+    if request.method == 'POST':
+        status_form = StatusCreationForm(request.POST)
+        if status_form.is_valid():
+            cleaned_data = status_form.cleaned_data
+            new_status = Status(
+                content=cleaned_data.get('content'),
+                owner=request.user
+            )
+            new_status.save()
+            messages.success(request, 'Status has been created')
+            return redirect('profile')
+    else:
+        status_form = StatusCreationForm()
 
     sent_friend_requests = FriendRequest.objects.filter(from_user=request.user)
     received_friend_requests = FriendRequest.objects.filter(to_user=request.user)
@@ -53,14 +90,16 @@ def profile(request):
         'frequest': frequest,
         'sent_to_ids': sent_to_ids,
         'received_from_ids': received_from_ids,
+        'statuses': status_list,
+        'status_form': status_form,
     }
 
     return render(request, 'users/profile.html', context)
 
 
-def other_profile(request, pk=None):
-    if pk:
-        user = SiteUser.objects.get(pk=pk)
+def other_profile(request, id=None):
+    if id:
+        user = SiteUser.objects.get(id=id)
     else:
         user = request.user
     context = {'user': user}
@@ -68,31 +107,21 @@ def other_profile(request, pk=None):
 
 
 @login_required
-def friends_profile(request, pk=None):
-    if pk:
-        friend = SiteUser.objects.get(pk=pk)
+def friends_profile(request, id=None):
+    if id:
+        friend = SiteUser.objects.get(id=id)
+        statuses = Status.objects.filter(owner_id=id)
+        status_list = []
+        for status in statuses:
+            status_list.append(status)
     else:
         friend = request.user
 
-    context = {'user': friend}
+    context = {
+        'user': friend,
+        'statuses': status_list,
+    }
 
     return render(request, 'users/friend_profile.html', context)
 
-
-@login_required
-def change_info(request):
-    if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
-        if u_form.is_valid():
-            u_form.save()
-            messages.success(request, f'Your account has been updated!')
-            return redirect('profile')
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-
-    context = {
-        'u_form': u_form,
-    }
-
-    return render(request, 'users/change_info.html', context)
 

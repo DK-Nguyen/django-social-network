@@ -1,5 +1,5 @@
 body {
-  background: #fafafa;
+  background: whitesmoke;
   color: #333333;
   margin-top: 5rem;
 }
@@ -29,11 +29,12 @@ ul {
 }
 
 .content-section {
-  background: #ffffff;
+  background: white;
   padding: 10px 20px;
   border: 1px solid #dddddd;
   border-radius: 3px;
   margin-bottom: 20px;
+  color: black;
 }
 
 .article-title {
@@ -81,4 +82,22 @@ a.article-title:hover {
 
 .account-heading {
   font-size: 2.5rem;
+}
+
+.comment-section {
+  background: whitesmoke;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  color: black;
+}
+
+.status-section {
+  background: snow;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  color: black;
 }

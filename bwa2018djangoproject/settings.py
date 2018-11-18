@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'friends.apps.FriendsConfig',
-    'discussion.apps.DiscussionConfig'
+    'discussion.apps.DiscussionConfig',
+    'status.apps.StatusConfig',
 ]
 
 MIDDLEWARE = [
