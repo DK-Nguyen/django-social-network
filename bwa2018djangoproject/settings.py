@@ -17,7 +17,6 @@ import django_heroku
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
@@ -44,6 +43,7 @@ INSTALLED_APPS = [
     'friends.apps.FriendsConfig',
     'discussion.apps.DiscussionConfig',
     'status.apps.StatusConfig',
+    'gravatar.apps.GravatarConfig'
 ]
 
 MIDDLEWARE = [
@@ -74,12 +74,14 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
             'debug': DEBUG,
+            'libraries': {
+                'gravatar_url_tag': 'gravatar.tags'
+            }
         },
     },
 ]
 
 WSGI_APPLICATION = 'bwa2018djangoproject.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases

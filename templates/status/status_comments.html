@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% load gravatar_url_tag %}
 {% block content %}
     <div class="content-section">
         <div class="media">
-            <img class="rounded-circle account-img" src="{{ user.profile_picture.url  }}">
+            <img class="rounded-circle account-img" src="{{ user.email|gravatar_url:100  }}">
             <div class="media-body">
                 <h4>{{ user.first_name }} says:</h4>
                 <strong>{{ status.content }}</strong>
@@ -16,7 +17,7 @@
             {% for comment in comments %}
                 <strong>{{ comment.content }}</strong>
                 <p>by {{ comment.commenter.username }}
-                    <img src="{{ comment.commenter.profile_picture.url }}" width="30" height="30"/>
+                    <img src="{{ comment.commenter.email|gravatar_url:30 }}" width="30" height="30"/>
                     <span>on {{ comment.created_time|date }}</span>
                 </p>
             {% endfor %}

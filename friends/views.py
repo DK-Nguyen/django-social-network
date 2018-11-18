@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
+from gravatar.tags import gravatar_url
 
 
 @login_required
@@ -64,7 +65,7 @@ def search_friend(request):
     for friend in search_friends:
         response.append({
             'name': friend.name(),
-            'profile_picture': friend.profile_picture.url,
+            'profile_picture': gravatar_url(friend.email, 30),
             'id': friend.id
         })
     return JsonResponse({'data': response})

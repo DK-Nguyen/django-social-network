@@ -40,4 +40,4 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = SiteUser
-        fields = ['first_name', 'last_name', 'address', 'phone_number', 'bio', 'profile_picture']
+        fields = ['first_name', 'last_name', 'address', 'phone_number', 'bio']

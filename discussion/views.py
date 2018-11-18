@@ -5,6 +5,7 @@ from .forms import DiscussionCreationForm, DiscussionUpdateForm, DiscussionComme
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from users.models import SiteUser
+from gravatar.tags import gravatar_url
 
 from .models import *
 
@@ -132,7 +133,7 @@ def get_comments(request, discussion_id):
                 'created_time': comment.created_time.isoformat(),
                 'commenter': {
                     'name': comment.commenter.name(),
-                    'profile_picture': comment.commenter.profile_picture.url
+                    'profile_picture': gravatar_url(comment.commenter.email, 20)
                 },
                 'can_delete': comment.commenter == request.user or request.user == current_discussion.owner
             })
