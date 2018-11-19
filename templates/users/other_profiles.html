@@ -3,10 +3,10 @@
 {% block content %}
     <div class="content-section">
       <div class="media">
-        <img class="rounded-circle account-img" src="{{ user.email|gravatar_url:100  }}">
+        <img class="rounded-circle account-img" src="{{ other_user.email|gravatar_url:100  }}">
         <div class="media-body">
-          <h2 class="account-heading">{{ user.username }}</h2>
-          <p class="text-secondary">{{ user.first_name }}</p>
+          <h2 class="account-heading">{{ other_user.username }}</h2>
+          <p class="text-secondary">{{ other_user.first_name }}</p>
 {#          <p class="text-secondary">{{ user.email }}</p>#}
 {#          <p class="text-secondary">{{ user.adress }}</p>#}
 {#          <p class="text-secondary">{{ user.phone_number }}</p>#}

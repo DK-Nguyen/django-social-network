@@ -48,7 +48,10 @@
     <h2> Friends </h2>
     {% for friend in friends %}
         <a href="{% url 'friend_profile' id=friend.id %}">
-            <p>{{ friend.username }}</p>
+            <p>
+                {{ friend.username }}
+                <img class="rounded-circle" src="{{ friend.email|gravatar_url:100}}" width="30" height="30">
+            </p>
         </a>
 
     {% endfor %}
@@ -57,7 +60,10 @@
     {% for user in other_users %}
         {% if not user in friends %}
             <a href="{% url 'profile_with_id' id=user.id %}">
-                <p>{{ user.username }}</p>
+                <p>
+                    {{ user.username }}
+                    <img class="rounded-circle" src="{{ friend.email|gravatar_url:100}}" width="30" height="30">
+                </p>
             </a>
             {% if user.id in received_from_ids %} <!-- if the user has sent me a friend request -->
                 <a href="{% url 'accept_request' id=user.id %} "> <!-- I can accept the request -->
