@@ -16,6 +16,15 @@ def about(request):
     return render(request, 'users/about.html', {'title': 'About'})
 
 
+@login_required
+def modify_base(request):
+    user = request.user
+    context = {
+        'user': user,
+    }
+    return render(request, 'base.html', context)
+
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -99,10 +108,10 @@ def profile(request):
 
 def other_profile(request, id=None):
     if id:
-        user = SiteUser.objects.get(id=id)
+        other_user = SiteUser.objects.get(id=id)
     else:
-        user = request.user
-    context = {'user': user}
+        other_user = request.user
+    context = {'other_user': other_user}
     return render(request, 'users/other_profiles.html', context)
 
 
@@ -118,7 +127,7 @@ def friends_profile(request, id=None):
         friend = request.user
 
     context = {
-        'user': friend,
+        'friend': friend,
         'statuses': status_list,
     }
 
