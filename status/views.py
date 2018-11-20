@@ -16,7 +16,7 @@ def status_comments(request, status_id):
         current_status = Status.objects.get(id=status_id)
         comments = StatusComment.objects.filter(status=current_status)
         comment_list = [i for i in comments]
-        user = current_status.owner
+        owner = current_status.owner
 
         if request.method == 'POST':
             comment_form = StatusCommentForm(request.POST)
@@ -37,8 +37,9 @@ def status_comments(request, status_id):
         context = {
             'status': current_status,
             'comments': comment_list,
-            'user': user,
+            'owner': owner,
             'comment_form': comment_form,
+            'user': request.user
         }
     except Status.DoesNotExist:
         return Http404('Discussion not found')
