@@ -27,8 +27,6 @@ Heroku deployment url: [https://bwa-project.herokuapp.com](https://bwa-project.h
 | User login/logout Feature | Khoa      |   1 Nov 2018 |
 | Friendship Feature | Khoa and Hai      |    12 Nov 2018 |
 | Discussions Feature | Joni | 12 Nov 2018|
-| Status in profile page feature | Khoa and Hai | 22 Nov 2018 |
-| Events Feature | Joni, Khoa and Hai | 22 Nov 2018 |
 
 Each feature will have its own implementation and test task to be done, since the design and research of the project has been executed and done during the first project meeting.
 The details of each features can be found in the project's gitlab issue board.
@@ -41,12 +39,11 @@ The details of each features can be found in the project's gitlab issue board.
 | Deploy Heroku project with PostgreSQL in production      | Hai      |   During the first meeting |
 | Using different apps for different parts in project | All team members      | Decided during the first meeting |
 |Using Bootstrap in templates| Khoa and Hai | Decided during the first meeting |
-| Writing and maintaining unit tests for project | Hai | Deadline is similar to each features' deadline which can be found in "Must have features section" |
-| Email verification | Khoa and Hai | 30 Nov 2018 |
-| Password reset | Khoa and Hai | 30 Nov 2018 |
 | Notification feature | All members | 6 Dec 2018 |
+| Status in profile page feature | Khoa and Hai | 22 Nov 2018 |
+| Events Feature | Joni, Khoa and Hai | 30 Nov 2018 |
 
-The estimated total stars we are planning to achieve is 14 stars.
+The estimated total stars we are planning to achieve is 12 stars.
 
 ## Pages and navigation
 
@@ -63,16 +60,20 @@ Here is the site map (drew during the second project meeting):
 
 ### Django apps in your Django project
 
-We are going to have 5 Django apps:
+We are going to have 7 Django apps:
 1. Users: ```/users``` This app will manage users of the project, registration, authentication, email verification and password reset.
 2. Profile: ```/profile``` This app will manage user's statuses in profile, users' friend list.
-3. Discussions: ```/discussions``` This app will manage user's discussions
-4. Events: ```/events``` This app will manage user's events
-5. Notifications *(Optional)*: ```/notifications``` This app will manage user's notifications
+3. Gravatar: This app is an utility app that fetch profile pictures from Gravatar based on user's email
+4. Status: ```/status```. This app will manage user's statuses in profile
+5. Discussions: ```/discussions``` This app will manage user's discussions
+6. Events: ```/events``` This app will manage user's events
+7. Notifications *(Optional)*: ```/notifications``` This app will manage user's notifications
 
 ### Needed Django models and their attributes
 
 During the first meeting we have already defined a map for models in the app.
+
+Update: If user deletes himself from the database, all his/her contents (discussions, statuses, friendships, ...) will be deleted
 
 ![alt text](models.jpg "Project models")
 
