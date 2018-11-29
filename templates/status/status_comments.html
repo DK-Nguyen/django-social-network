@@ -3,9 +3,9 @@
 {% block content %}
     <div class="content-section">
         <div class="media">
-            <img class="rounded-circle account-img" src="{{ user.email|gravatar_url:100  }}">
+            <img class="rounded-circle account-img" src="{{ owner.email|gravatar_url:100  }}">
             <div class="media-body">
-                <h4>{{ user.first_name }} says:</h4>
+                <h4>{{ owner.first_name }} says:</h4>
                 <strong>{{ status.content }}</strong>
             </div>
         </div>
