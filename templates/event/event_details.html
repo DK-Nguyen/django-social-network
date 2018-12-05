@@ -14,6 +14,7 @@
         <div class="row">
             <div class="col">
                 <p>Location: {{ event.location }}</p>
+                <p>Start: {{ event.start_time|date }}  End: {{ event.end_time|date }}</p>
                 <p>{{ event.description }}</p>
             </div>
         </div>
