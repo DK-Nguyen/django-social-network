@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load gravatar_url_tag %}
+{% block content %}
+    {% for event in events %}
+    <div class="content-section">
+        <h4>{{ event.name }}</h4>
+        <div class="row justify-content-center">
+            <div class="col">
+            <img src="{{ event.owner.email|gravatar_url:26 }}" width="26" height="26" alt="author-avatar" class="rounded-circle" />
+            <span>{{ discussion.owner.name }}</span>
+            <span>on {{ event.created_time|date }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>{{ event.description }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-sm btn-info" href="{% url 'event_details' event_id=event.id %}">
+                    See details
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock content %}
+{% block actions %}
+    <a class="btn btn-success" href="{% url 'new_event' %}">
+        New event
+    </a>
+{% endblock %}

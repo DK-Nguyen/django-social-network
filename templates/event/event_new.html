@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Initiate a new event</legend>
+                {{ form.as_p }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block custom_js %}
+<script>
+    {% autoescape off %}
+  $(function() {
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+        altFormat: 'YYYY-MM-DD HH:mm:ss'
+      // You can put more options here.
+
+    });
+  });
+  {% endautoescape %}
+  </script>
+{% endblock %}

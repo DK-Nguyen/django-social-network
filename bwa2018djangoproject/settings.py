@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'friends.apps.FriendsConfig',
     'discussion.apps.DiscussionConfig',
     'status.apps.StatusConfig',
-    'gravatar.apps.GravatarConfig'
+    'gravatar.apps.GravatarConfig',
+    'event.apps.EventConfig'
 ]
 
 MIDDLEWARE = [
