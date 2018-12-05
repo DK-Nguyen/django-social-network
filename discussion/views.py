@@ -110,10 +110,11 @@ def invite_participant(request, discussion_id, friend_id):
 def leave_discussion(request, discussion_id):
     try:
         discussion = Discussion.objects.get(id=discussion_id)
-        participant = DiscussionParticipant.objects.get(participant=request.user, discussion=discussion)
-        if (participant.discussion != discussion):
-            return HttpResponseBadRequest('Participant is not in this discussion!')
-        participant.delete()
+        participants = DiscussionParticipant.objects.filter(participant=request.user, discussion=discussion)
+        if (len(participants) == 0):
+            return Http404('Participant is not in this discussion!')
+        for participant in participants:
+            participant.delete()
         return redirect('/discussions')
     except SiteUser.DoesNotExist:
         return Http404('Friend not found')
