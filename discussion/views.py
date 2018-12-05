@@ -93,6 +93,9 @@ def invite_participant(request, discussion_id, friend_id):
     try:
         friend = SiteUser.objects.get(id=friend_id)
         discussion = Discussion.objects.get(id=discussion_id)
+        find_participant = DiscussionParticipant.objects.filter(participant=friend, discussion=discussion)
+        if len(find_participant) > 0:
+            return HttpResponseBadRequest('Friend is already in the discussion')
         new_participant = DiscussionParticipant(participant=friend, discussion=discussion)
         new_participant.save()
         return redirect(discussion.get_absolute_url())

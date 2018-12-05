@@ -172,7 +172,9 @@
                     url: '/discussions/{{ discussion.id }}/participants/new/' + friendid + '/',
                     headers: {'X-CSRFToken': getCookie('csrftoken')}
                 }).done(function addParticipantSuccess() {
-                    window.reload()
+                    window.location.reload()
+                }).fail(function addParticipantFail(xhr, ajaxOptions, thrownError) {
+                    alert(xhr.responseText);
                 })
             }
 
