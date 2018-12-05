@@ -30,9 +30,24 @@
                     </a>
                 {% endif %}
                 {%  if is_participating %}
-{#                    <a class="btn btn-danger btn-sm" href="{% url 'leave_event' discussion_id=discussion.id %}">#}
-{#                        Leave#}
-{#                    </a>#}
+                    <form method="POST" action="{% url 'leave_or_reject_event' event_id=event.id %}">
+                        {% csrf_token %}
+                    <button class="btn btn-primary btn-sm" type="submit">
+                        {% if accepted %}
+                            Leave
+                            {% else %}
+                            Reject Invitation
+                            {% endif %}
+                    </button>
+                    </form>
+                {% endif %}
+                {%  if is_participating and not accepted %}
+                    <form method="POST" action="{% url 'accept_invitation' event_id=event.id %}">
+                        {% csrf_token %}
+                    <button class="btn btn-primary btn-sm" type="submit">
+                        Accept Invitation
+                    </button>
+                    </form>
                 {% endif %}
             </div>
         </div>
@@ -40,7 +55,7 @@
 
 {% endblock content %}
 {% block actions %}
-    {% if is_participating %}
+    {% if is_participating or is_owner %}
     <div class="content-section">
 
         <div class="input-group">

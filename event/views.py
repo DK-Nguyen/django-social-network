@@ -20,13 +20,14 @@ def event_details(request, event_id):
     try:
         event = Event.objects.get(id=event_id)
         participants = EventParticipant.objects.filter(event=event)
-        find_user_participation = EventParticipant.objects.filter(event=event, invitee=request.user, accepted=True)
+        find_user_participation = EventParticipant.objects.filter(event=event, invitee=request.user)
         is_participating = len(find_user_participation) > 0
         is_owner = event.owner == request.user
         context = {
             'event': event,
             'participants': participants,
-            'is_participating': is_owner or is_participating,
+            'is_participating': is_participating,
+            'accepted': is_participating and find_user_participation[0].accepted,
             'is_owner': is_owner
         }
         return render(request, 'event/event_details.html', context)
@@ -74,6 +75,37 @@ def invite_participant(request, event_id, friend_id):
 
 
 @login_required
+@require_http_methods(['POST'])
+def accept_participation(request, event_id):
+    try:
+        event = Event.objects.get(id=event_id)
+        invitee = EventParticipant.objects.get(event=event, invitee=request.user)
+        if invitee.accepted:
+            return HttpResponseBadRequest('You already accepted')
+        invitee.accepted = True
+        invitee.save()
+        return redirect(event.get_absolute_url())
+    except Event.DoesNotExist:
+        return Http404('Event not found')
+    except EventParticipant.DoesNotExist:
+        return Http404('You are not invited')
+
+
+@login_required
+@require_http_methods(['POST'])
+def leave_or_reject_event(request, event_id):
+    try:
+        event = Event.objects.get(id=event_id)
+        invitee = EventParticipant.objects.get(event=event, invitee=request.user)
+        invitee.delete()
+        return redirect(event.get_absolute_url())
+    except Event.DoesNotExist:
+        return Http404('Event not found')
+    except EventParticipant.DoesNotExist:
+        return Http404('You are not invited')
+
+
+@login_required
 def event_edit(request, event_id):
     event_to_update = Event.objects.get(id=event_id)
     if request.method == 'POST':
@@ -97,4 +129,3 @@ def delete_event(request, event_id):
         return redirect('events')
     except Event.DoesNotExist:
         return Http404('Event does not exist')
-
