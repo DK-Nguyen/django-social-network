@@ -97,7 +97,9 @@
     <script type="text/javascript">
         {% autoescape off %}
 
-
+            /**
+             * This function is handling an AJAX request to search friend using a string query
+             */
             function handleSearchFriend() {
                 const query = $('#search-friend').val();
 
@@ -116,6 +118,10 @@
 
             };
 
+            /**
+             * This function handles an AJAX request to add a friend as a participant
+             * @param friendid: user id of the friend
+             */
             function addFriendAsParticipant(friendid) {
                 jQuery.ajax({
                     method: 'post',
@@ -128,6 +134,11 @@
                 })
             }
 
+            /**
+             * This function build a HTML string to create a search result from searching friend
+             * @param friend: Data given when calling handleSearchFriend()
+             * @returns {string}: HTML string for jquery to convert into HTML elements
+             */
             function buildSearchResultRow(friend) {
                 return '<li class="list-group-item list-group-item-light">\n' +
                     '                    <div class="row">\n' +

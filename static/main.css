@@ -105,3 +105,7 @@ a.article-title:hover {
 #friends {
   display: inline;
 }
+
+ul.errorlist li {
+  color: red;
+}

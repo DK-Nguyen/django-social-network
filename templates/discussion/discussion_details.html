@@ -86,6 +86,9 @@
 {% block custom_js %}
     <script type="text/javascript">
         {% autoescape off %}
+            /**
+             * Ajax function to get comments of the discussion. If success, render the comments to html
+             */
             function getComments() {
                 jQuery.get('/discussions/{{ discussion.id }}/comments')
                     .done(function fetchCommentSuccess(data) {
@@ -97,6 +100,12 @@
                     })
             }
 
+            /**
+             * This function build a comment as a HTML div and connect its buttons to ajax function
+             * such as deleting the comment
+             * @param comment: The comment got from function getComments()
+             * @returns {string}: HTML string that jquery will convert into HTML elements
+             */
             function createCommentRow(comment) {
                 return "<div class=\"content-section\">\n" +
                     "            <div class=\"row justify-content-center\">\n" +
@@ -116,7 +125,10 @@
                     "        </div>"
             }
 
-
+            /**
+             * This function is handling an AJAX request to delete a comment
+             * @param commentId (number): comment id that we want to delete
+             */
             function handleClickDeleteComment(commentId) {
                 jQuery.ajax({
                     method: 'delete',
@@ -131,6 +143,9 @@
                     })
             }
 
+            /**
+             * This function is handling an AJAX request to submit a comment
+             */
             function submitComment() {
                 const commentContent = $('#new_comment_content').val();
                 jQuery.ajax({
@@ -148,6 +163,9 @@
                     })
             }
 
+            /**
+             * This function is handling an AJAX request to search friend using a string query
+             */
             function handleSearchFriend() {
                 const query = $('#search-friend').val();
 
@@ -166,6 +184,10 @@
 
             };
 
+            /**
+             * This function handles an AJAX request to add a friend as a participant
+             * @param friendid: user id of the friend
+             */
             function addFriendAsParticipant(friendid) {
                 jQuery.ajax({
                     method: 'post',
@@ -178,6 +200,11 @@
                 })
             }
 
+            /**
+             * This function build a HTML string to create a search result from searching friend
+             * @param friend: Data given when calling handleSearchFriend()
+             * @returns {string}: HTML string for jquery to convert into HTML elements
+             */
             function buildSearchResultRow(friend) {
                 return '<li class="list-group-item list-group-item-light">\n' +
                     '                    <div class="row">\n' +
@@ -196,6 +223,7 @@
 
             $(document).ready(function discussionDetailPageReady() {
                 getComments();
+                // get new comments every 7 seconds
                 setInterval(getComments, 7000);
             });
         {% endautoescape %}

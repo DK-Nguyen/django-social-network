@@ -12,6 +12,7 @@ from .models import *
 
 @login_required
 def discussions(request):
+    '''A view where all discussions are shown'''
     all_discussions = Discussion.objects.all()
     context = {
         'discussions': all_discussions
@@ -21,6 +22,7 @@ def discussions(request):
 
 @login_required
 def new_discussion(request):
+    '''A view where new discussion can be created'''
     if request.method == 'POST':
         form = DiscussionCreationForm(request.POST)
         if form.is_valid():
@@ -50,6 +52,7 @@ def new_discussion(request):
 
 @login_required
 def edit_discussion(request, discussion_id):
+    '''A view where a discussion, with the ID of discussion_id, can be edited'''
     discussion_to_update = Discussion.objects.get(id__exact=discussion_id)
     if request.method == 'POST':
         form = DiscussionUpdateForm(request.POST, instance=discussion_to_update)
@@ -69,6 +72,7 @@ def edit_discussion(request, discussion_id):
 
 @login_required
 def discussion(request, discussion_id):
+    '''A view  where a discussion, with the ID of discussion_id, can be viewed'''
     current_discussion = Discussion.objects.get(id=discussion_id)
     participants = DiscussionParticipant.objects.filter(discussion=current_discussion)
     find_user_participate = DiscussionParticipant.objects.filter(
@@ -90,13 +94,25 @@ def discussion(request, discussion_id):
 @login_required
 @require_http_methods(["POST"])
 def invite_participant(request, discussion_id, friend_id):
+    '''
+        The function is called when the user adds a friend, with the ID of
+        friend_id, to a discussion, with the ID of discussion_id. If both exist
+        and the friend is not a participant of the discussion already, they are
+        added as a participant.
+    '''
     try:
         friend = SiteUser.objects.get(id=friend_id)
         discussion = Discussion.objects.get(id=discussion_id)
-        find_participant = DiscussionParticipant.objects.filter(participant=friend, discussion=discussion)
+        find_participant = DiscussionParticipant.objects.filter(
+            participant=friend,
+            discussion=discussion
+        )
         if len(find_participant) > 0:
             return HttpResponseBadRequest('Friend is already in the discussion')
-        new_participant = DiscussionParticipant(participant=friend, discussion=discussion)
+        new_participant = DiscussionParticipant(
+            participant=friend,
+            discussion=discussion
+        )
         new_participant.save()
         return redirect(discussion.get_absolute_url())
     except SiteUser.DoesNotExist:
@@ -108,16 +124,26 @@ def invite_participant(request, discussion_id, friend_id):
 
 @login_required
 def leave_discussion(request, discussion_id):
+    '''
+        The function is called when the user leaves a discussion, with the ID
+        of discussion_id. The user is removed from the discussion.
+    '''
     try:
         discussion = Discussion.objects.get(id=discussion_id)
-        participants = DiscussionParticipant.objects.filter(participant=request.user, discussion=discussion)
+        participants = DiscussionParticipant.objects.filter(
+            participant=request.user,
+            discussion=discussion
+        )
         if (len(participants) == 0):
             return Http404('Participant is not in this discussion!')
+
+        # There should be only one participant (the user) at this stage, but if
+        # the user has ended up multiple times on the participants for any
+        # reason it gets fixed here.
         for participant in participants:
             participant.delete()
+
         return redirect('/discussions')
-    except SiteUser.DoesNotExist:
-        return Http404('Friend not found')
     except DiscussionParticipant.DoesNotExist:
         return Http404('Participant not found')
     return HttpResponse('OK')
@@ -126,6 +152,10 @@ def leave_discussion(request, discussion_id):
 @login_required
 @require_http_methods(["GET"])
 def get_comments(request, discussion_id):
+    '''
+        The function gathers all comments in a discussion, with the ID of
+        discussion_id, and returns them as a JSON response.
+    '''
     try:
         current_discussion = Discussion.objects.get(id=discussion_id)
         comments = DiscussionComment.objects.filter(discussion=current_discussion)
@@ -139,7 +169,8 @@ def get_comments(request, discussion_id):
                     'name': comment.commenter.name(),
                     'profile_picture': gravatar_url(comment.commenter.email, 20)
                 },
-                'can_delete': comment.commenter == request.user or request.user == current_discussion.owner
+                'can_delete': comment.commenter == request.user or
+                              request.user == current_discussion.owner
             })
         return JsonResponse({'comments': response})
     except Discussion.DoesNotExist:
@@ -149,9 +180,17 @@ def get_comments(request, discussion_id):
 @login_required
 @require_http_methods(["POST"])
 def post_comments(request, discussion_id):
+    '''
+        The function is called when the user comments on a discussion, with the
+        ID of discussion_id. The comment is added to the discussion if the user
+        is a participant of it and the comment is valid.
+    '''
     try:
         current_discussion = Discussion.objects.get(id=discussion_id)
-        participants = DiscussionParticipant.objects.filter(discussion=current_discussion, participant=request.user)
+        participants = DiscussionParticipant.objects.filter(
+            discussion=current_discussion,
+            participant=request.user
+        )
         if len(participants) == 0:
             return HttpResponseForbidden('You cannot comment to this discussion!')
         form = DiscussionCommentForm(request.POST)
@@ -171,6 +210,11 @@ def post_comments(request, discussion_id):
 @login_required()
 @require_http_methods(["DELETE"])
 def delete_comment(request, discussion_id, comment_id):
+    '''
+        The function is called when the user removes a comment, with the ID of
+        comment_id, from a discussion, with the ID of discussion_id. The
+        comment is removed if the user is authenticated to do so.
+    '''
     try:
         current_discussion = Discussion.objects.get(id=discussion_id)
         current_comment = DiscussionComment.objects.get(id=comment_id)
@@ -183,4 +227,4 @@ def delete_comment(request, discussion_id, comment_id):
     except Discussion.DoesNotExist:
         return Http404('Discussion not found')
     except DiscussionComment.DoesNotExist:
-        return Http404('comment not found')
+        return Http404('Comment not found')

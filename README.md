@@ -15,6 +15,16 @@ Gitlab repo url: [git@course-gitlab.tut.fi:bwa-2018/bwa-group005.git](git@course
 
 Heroku deployment url: [https://bwa-project.herokuapp.com](https://bwa-project.herokuapp.com)
 
+## Demo login information
+
+#### Administrator accounts
+* Usernames: ```admin1``` and ```admin2```.
+
+#### Normal accounts
+* Usernames: ```normaluser1```, ```normaluser2```, ```normaluser3```, ```normaluser4```, ```normaluser5```
+
+#### All demo accounts have password of ```bwaproject2018```
+
 ## Must have features
 
 1. Implementation order:
