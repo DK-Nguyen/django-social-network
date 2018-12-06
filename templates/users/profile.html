@@ -47,13 +47,19 @@
 {% block content2 %}
     <h2> Friends </h2>
     {% for friend in friends %}
-        <a href="{% url 'friend_profile' id=friend.id %}">
-            <p>
-                {{ friend.username }}
-                <img class="rounded-circle" src="{{ friend.email|gravatar_url:100}}" width="30" height="30">
-            </p>
-        </a>
+        <p id="friends">
+            <a href="{% url 'friend_profile' id=friend.id %}">
+                <p>
+                    {{ friend.username }}
+                    <img class="rounded-circle" src="{{ friend.email|gravatar_url:100}}" width="30" height="30">
+                </p>
 
+            </a>
+
+            <a href="{% url 'delete_friend' id=friend.id %} ">
+                        <button type="button" class="btn btn-warning">Delete</button>
+            </a>
+        </p>
     {% endfor %}
 
     <h2> Others </h2>

@@ -85,7 +85,7 @@ a.article-title:hover {
 }
 
 .comment-section {
-  background: whitesmoke;
+  background: white;
   padding: 10px 20px;
   border: 1px solid #dddddd;
   border-radius: 3px;
@@ -94,10 +94,14 @@ a.article-title:hover {
 }
 
 .status-section {
-  background: snow;
+  background: white;
   padding: 10px 20px;
   border: 1px solid #dddddd;
   border-radius: 3px;
   margin-bottom: 20px;
   color: black;
+}
+
+#friends {
+  display: inline;
 }

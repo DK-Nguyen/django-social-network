@@ -107,3 +107,19 @@ def search_friend(request):
         })
     return JsonResponse({'data': response})
 
+
+@login_required
+# @require_http_methods(["DELETE"])
+def delete_friend(request, id):
+    """
+    This function is used to delete a friend of a user that sends the http request
+    :param id: the id of the friend to be deleted
+    """
+    try:
+        user = request.user
+        to_be_deleted_friend = user.friends.filter(id=id).first()
+        user.friends.remove(to_be_deleted_friend)
+        to_be_deleted_friend.friends.remove(user)
+        return redirect('profile')
+    except:
+        HttpResponseBadRequest('Bad request')

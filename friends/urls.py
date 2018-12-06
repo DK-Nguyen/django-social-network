@@ -7,4 +7,5 @@ urlpatterns = [
     path('friend-request/accept/<int:id>/', friends_views.accept_friend_request, name='accept_request'),
     path('friend-request/delete/<int:id>/', friends_views.delete_friend_request, name='delete_request'),
     path('search', friends_views.search_friend, name="search_friend"),
+    path('delete/<int:id>/', friends_views.delete_friend, name='delete_friend'),
 ]
