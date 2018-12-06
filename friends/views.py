@@ -9,16 +9,32 @@ from gravatar.tags import gravatar_url
 
 @login_required
 def send_friend_request(request, id):
+    """
+    This function creates a FriendRequest object from the user that sent the request
+    to the user with the id specified in the parameter "id"
+
+    :param id:
+        the id of the user that the request will be sent to
+    """
+
     try:
         to_user = SiteUser.objects.get(id=id)
         frequest, created = FriendRequest.objects.get_or_create(from_user=request.user, to_user=to_user)
         return redirect('profile')
+
     except:
         HttpResponseBadRequest('Bad request')
 
 
 @login_required
 def cancel_friend_request(request, id):
+    """
+    This function deletes the FriendRequest object from the user that sent the http request
+    to the user with the id specified in the parameter "id"
+
+    :param id:
+        the id of the user that the request will be sent to
+    """
     try:
         to_user = SiteUser.objects.get(id=id)
         frequest = FriendRequest.objects.filter(from_user=request.user, to_user=to_user).first()
@@ -30,6 +46,14 @@ def cancel_friend_request(request, id):
 
 @login_required
 def accept_friend_request(request, id):
+    """
+    This function checks the friend request from the user with the id specified in the
+    parameter "id" to the user that sent the http request, then connect them by adding
+    each other to other's friend list.
+
+    :param id:
+        the id of the user that sent the request
+    """
     try:
         from_user = SiteUser.objects.get(id=id)
         frequest = FriendRequest.objects.filter(from_user=from_user, to_user=request.user).first()
@@ -45,6 +69,13 @@ def accept_friend_request(request, id):
 
 @login_required
 def delete_friend_request(request, id):
+    """
+    This function checks the friend request from the user with the id specified in the
+    parameter "id" to the user that sent the http request, then delete that friend request
+
+    :param id:
+        the id of the user that sent the request
+    """
     try:
         from_user = SiteUser.objects.get(id=id)
         frequest = FriendRequest.objects.filter(from_user=from_user, to_user=request.user).first()
@@ -57,6 +88,12 @@ def delete_friend_request(request, id):
 @login_required
 @require_http_methods(["GET"])
 def search_friend(request):
+    """
+    This function is used to find the friend with the name specified in 'query'
+
+    :return:
+        The list of friends with match name.
+    """
     query = request.GET.get('query')
     if len(query) < 1:
         return HttpResponseBadRequest('Search query too short')

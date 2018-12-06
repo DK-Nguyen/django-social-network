@@ -18,6 +18,10 @@ def about(request):
 
 @login_required
 def modify_base(request):
+    """
+    This function is used to give the base.html the information about the user that sends
+    a http request.
+    """
     user = request.user
     context = {
         'user': user,
@@ -26,6 +30,9 @@ def modify_base(request):
 
 
 def register(request):
+    """
+    This function is used to create a form for a new user to register
+    """
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -40,6 +47,9 @@ def register(request):
 
 @login_required
 def change_info(request):
+    """
+    This function is used to create a form for a user to update his information
+    """
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
         if u_form.is_valid():
@@ -58,6 +68,10 @@ def change_info(request):
 
 @login_required
 def profile(request):
+    """
+    This function is used to query the data for a user that already logged in to show them to the profile page.
+
+    """
     # p = request.user
     # id_to_exclude = [i.id for i in request.user.friends.id]
     other_users = SiteUser.objects.exclude(id=request.user.id)
@@ -107,6 +121,12 @@ def profile(request):
 
 
 def other_profile(request, id=None):
+    """
+    This function is used to get the data of a user who are not friends of the user that sends the http request.
+
+    :param
+        id: the id of the user whose profile page is to be seen
+    """
     if id:
         other_user = SiteUser.objects.get(id=id)
     else:
@@ -117,6 +137,13 @@ def other_profile(request, id=None):
 
 @login_required
 def friends_profile(request, id=None):
+    """
+    This function is used to get the data of a friend of the user who sends the http request.
+
+    :param
+        id: the id of the friend
+
+    """
     if id:
         friend = SiteUser.objects.get(id=id)
         statuses = Status.objects.filter(owner_id=id)

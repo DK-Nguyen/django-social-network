@@ -5,6 +5,10 @@ from django.contrib.auth.models import AbstractUser
 
 
 class SiteUser(AbstractUser):
+    """
+    This class represents a User of the website, it inherits from AbstractUser
+    The variables are self-commented.
+    """
     first_name = models.CharField(max_length=30, blank=False)
     last_name = models.CharField(max_length=150, blank=False)
     email = models.EmailField(blank=False, unique=True)

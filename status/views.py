@@ -9,9 +9,13 @@ from django.views.decorators.http import require_http_methods
 
 @login_required
 def status_comments(request, status_id):
-    # POST submits data to be processed (e.g., from an HTML form) to the identified resource.
-    # The data is included in the body of the request.
-    # This may result in the creation of a new resource or the updates of existing resources or both.
+    """
+    This function creates a form for the user to comment on a status
+
+    :param
+        status_id: the id of the status to comment on
+
+    """
     try:
         current_status = Status.objects.get(id=status_id)
         comments = StatusComment.objects.filter(status=current_status)
@@ -20,6 +24,9 @@ def status_comments(request, status_id):
 
         if request.method == 'POST':
             comment_form = StatusCommentForm(request.POST)
+            # POST submits data to be processed (e.g., from an HTML form) to the identified resource.
+            # The data is included in the body of the request.
+            # This may result in the creation of a new resource or the updates of existing resources or both.
             if comment_form.is_valid():
                 cleaned_data = comment_form.cleaned_data
                 new_status_comment = StatusComment(
@@ -49,6 +56,12 @@ def status_comments(request, status_id):
 
 @login_required
 def delete_status(request, status_id):
+    """
+    This function deletes a status with the id specified in the parameter "status_id"
+
+    :param status_id: the id of the status to be deleted
+    """
+
     current_status = Status.objects.get(id=status_id)
     try:
         comments = StatusComment.objects.filter(status=current_status)
