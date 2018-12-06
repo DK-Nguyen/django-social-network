@@ -52,6 +52,7 @@ def event_new(request):
             new_event.save()
             messages.success(request, 'Event has been created')
             return redirect(new_event.get_absolute_url())
+        return render(request, 'event/event_new.html', {'form': form})
     form = EventCreationForm()
     return render(request, 'event/event_new.html', {'form': form})
 
@@ -114,7 +115,8 @@ def event_edit(request, event_id):
             edited_event = form.save()
             messages.success(request, 'Event has been updated')
             return redirect(edited_event.get_absolute_url())
-        print('form is not valid')
+        else:
+            return render(request, 'event/event_edit.html', {'form': form})
     form = EventUpdateForm(instance=event_to_update)
     return render(request, 'event/event_edit.html', {'form': form})
 

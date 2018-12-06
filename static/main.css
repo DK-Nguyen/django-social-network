@@ -101,3 +101,7 @@ a.article-title:hover {
   margin-bottom: 20px;
   color: black;
 }
+
+ul.errorlist li {
+  color: red;
+}
