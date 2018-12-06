@@ -14,7 +14,7 @@ class Discussion(models.Model):
         return "/discussions/%i/" % self.id
 
     class Meta:
-        ordering = ['created_time']
+        ordering = ['-created_time']
 
 
 class DiscussionComment(models.Model):
@@ -25,7 +25,7 @@ class DiscussionComment(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['created_time']
+        ordering = ['-created_time']
 
 
 class DiscussionParticipant(models.Model):
