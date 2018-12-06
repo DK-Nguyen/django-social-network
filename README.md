@@ -23,7 +23,7 @@ Heroku deployment url: [https://bwa-project.herokuapp.com](https://bwa-project.h
 #### Normal accounts
 * Usernames: ```normaluser1```, ```normaluser2```, ```normaluser3```, ```normaluser4```, ```normaluser5```
 
-#### All demo accounts have password of ``````bwaproject2018```
+#### All demo accounts have password of ```bwaproject2018```
 
 ## Must have features
 
