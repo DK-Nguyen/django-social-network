@@ -103,10 +103,16 @@ def invite_participant(request, discussion_id, friend_id):
     try:
         friend = SiteUser.objects.get(id=friend_id)
         discussion = Discussion.objects.get(id=discussion_id)
-        find_participant = DiscussionParticipant.objects.filter(participant=friend, discussion=discussion)
+        find_participant = DiscussionParticipant.objects.filter(
+            participant=friend,
+            discussion=discussion
+        )
         if len(find_participant) > 0:
             return HttpResponseBadRequest('Friend is already in the discussion')
-        new_participant = DiscussionParticipant(participant=friend, discussion=discussion)
+        new_participant = DiscussionParticipant(
+            participant=friend,
+            discussion=discussion
+        )
         new_participant.save()
         return redirect(discussion.get_absolute_url())
     except SiteUser.DoesNotExist:
@@ -124,7 +130,10 @@ def leave_discussion(request, discussion_id):
     '''
     try:
         discussion = Discussion.objects.get(id=discussion_id)
-        participants = DiscussionParticipant.objects.filter(participant=request.user, discussion=discussion)
+        participants = DiscussionParticipant.objects.filter(
+            participant=request.user,
+            discussion=discussion
+        )
         if (len(participants) == 0):
             return Http404('Participant is not in this discussion!')
 
@@ -160,7 +169,8 @@ def get_comments(request, discussion_id):
                     'name': comment.commenter.name(),
                     'profile_picture': gravatar_url(comment.commenter.email, 20)
                 },
-                'can_delete': comment.commenter == request.user or request.user == current_discussion.owner
+                'can_delete': comment.commenter == request.user or
+                              request.user == current_discussion.owner
             })
         return JsonResponse({'comments': response})
     except Discussion.DoesNotExist:
@@ -177,7 +187,10 @@ def post_comments(request, discussion_id):
     '''
     try:
         current_discussion = Discussion.objects.get(id=discussion_id)
-        participants = DiscussionParticipant.objects.filter(discussion=current_discussion, participant=request.user)
+        participants = DiscussionParticipant.objects.filter(
+            discussion=current_discussion,
+            participant=request.user
+        )
         if len(participants) == 0:
             return HttpResponseForbidden('You cannot comment to this discussion!')
         form = DiscussionCommentForm(request.POST)
