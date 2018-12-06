@@ -58,6 +58,7 @@
 
     <h2> Others </h2>
     {% for user in other_users %}
+        <div class="content-section">
         {% if not user in friends %}
             <a href="{% url 'profile_with_id' id=user.id %}">
                 <p>
@@ -84,5 +85,6 @@
                 {% endif %}
             {% endif %}
         {% endif %}
+        </div>
     {% endfor %}
 {% endblock content2 %}
