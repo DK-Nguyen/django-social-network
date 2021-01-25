@@ -7,9 +7,9 @@
 Group name: ***Appropriate***
 
 Group members:
-* Dang Hai Luong - dang.luong@student.tut.fi - 268461
-* Duy Khoa Nguyen - nguyen29@student.tut.fi - 272580
-* Joni Seppälä - joni.seppala@student.tut.fi - 246014
+* Dang Hai Luong - dang.luong@student.tut.fi
+* Duy Khoa Nguyen - nguyen29@student.tut.fi
+* Joni Seppälä - joni.seppala@student.tut.fi
 
 Gitlab repo url: [git@course-gitlab.tut.fi:bwa-2018/bwa-group005.git](git@course-gitlab.tut.fi:bwa-2018/bwa-group005.git)
 
