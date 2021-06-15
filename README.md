@@ -10,36 +10,6 @@ Heroku deployment url: [https://bwa-project.herokuapp.com](https://bwa-project.h
 
 #### All demo accounts have password of ```bwaproject2018```
 
-## Must have features
-
-1. Implementation order:
-
-| Feature| Assignee      | Deadline  |
-| ------------- |:-------------:| -----:|
-| Help team to run project|Hai| During the first meeting|
-| Deploy dummy Heroku project | Hai | During the first meeting|
-| User registration Feature | Khoa | 1 Nov 2018 |
-| User login/logout Feature | Khoa      |   1 Nov 2018 |
-| Friendship Feature | Khoa and Hai      |    12 Nov 2018 |
-| Discussions Feature | Joni | 12 Nov 2018|
-
-Each feature will have its own implementation and test task to be done, since the design and research of the project has been executed and done during the first project meeting.
-The details of each features can be found in the project's gitlab issue board.
-
-## Planned +2 features
-
-| Feature| Assignee      | Deadline  |
-| ------------- |:-------------:| -----:|
-| Setup PostgreSQL for team | Hai | During the first meeting |
-| Deploy Heroku project with PostgreSQL in production      | Hai      |   During the first meeting |
-| Using different apps for different parts in project | All team members      | Decided during the first meeting |
-|Using Bootstrap in templates| Khoa and Hai | Decided during the first meeting |
-| Notification feature | All members | 6 Dec 2018 |
-| Status in profile page feature | Khoa and Hai | 22 Nov 2018 |
-| Events Feature | Joni, Khoa and Hai | 30 Nov 2018 |
-
-The estimated total stars we are planning to achieve is 12 stars.
-
 ## Pages and navigation
 
 Before seeing the site map, there are two important notices:
