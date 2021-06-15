@@ -1,18 +1,3 @@
-**Welcome to group *Appropriate*'s BWA course project code and documentation!**
-
-# Initial project plan document
-
-## Course project group information
-
-Group name: ***Appropriate***
-
-Group members:
-* Dang Hai Luong - dang.luong@student.tut.fi
-* Khoa Nguyen - nguyen29@student.tut.fi
-* Joni Seppälä - joni.seppala@student.tut.fi
-
-Gitlab repo url: [git@course-gitlab.tut.fi:bwa-2018/bwa-group005.git](git@course-gitlab.tut.fi:bwa-2018/bwa-group005.git)
-
 Heroku deployment url: [https://bwa-project.herokuapp.com](https://bwa-project.herokuapp.com)
 
 ## Demo login information
